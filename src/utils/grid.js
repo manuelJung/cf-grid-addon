@@ -40,20 +40,17 @@ export const translateGridToLayout = (grid, cols, allComponents) => {
         }
       }
     }
-
-    const widths = (grid.split('/')[1] || '').split(/\s+/).filter(x => x).map((row,i) => ({
+    const widthBuffer = (grid.split('/')[1] || '').split(/\s+/).filter(x => x)
+    const widths = Array(cols).fill().map((_,i) => widthBuffer[i]).map((row,i) => ({
       x:i+2, // +1 to shift all one right for grid heights
       y:0,  // should be first row
       w:1, 
       h:1, 
-      i: (row+'-'+i), 
+      i: ((row|| '1fr')+'-'+i), 
       static: true, 
-      name: row, 
+      name: row || '1fr', 
       type: types.WIDTH
     }))
-
-    console.log(grid
-      .split('/')[0])
 
     const heights = grid
       .split('/')[0]
