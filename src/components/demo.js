@@ -70,7 +70,7 @@ export default class DynamicMinMaxLayout extends React.PureComponent {
       isResizable: true,
       items: 5,
       rowHeight: 30,
-      onLayoutChange: console.log,
+      onLayoutChange: () => console.log(this.state.layout),
       cols: this.state.cols
     }
     return (

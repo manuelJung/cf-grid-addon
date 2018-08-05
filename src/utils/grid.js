@@ -3,7 +3,8 @@ export const types = {
     WIDTH: 'WIDTH',
     HEIGHT: 'HEIGHT',
     COLS: 'COLS',
-    EXTERN: 'EXTERN'
+    EXTERN: 'EXTERN',
+    BUFFER: 'BUFFER'
 }
 
 export const translateGridToLayout = (grid, cols, allComponents) => {
@@ -78,7 +79,7 @@ export const translateGridToLayout = (grid, cols, allComponents) => {
         h:1,
         i: (row+'-'+i),
         name: row,
-        type: types.COMPONENT
+        type: types.BUFFER
       }))
 
     return [
