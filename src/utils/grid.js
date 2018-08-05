@@ -2,7 +2,8 @@ export const types = {
     COMPONENT: 'COMPONENT',
     WIDTH: 'WIDTH',
     HEIGHT: 'HEIGHT',
-    COLS: 'COLS'
+    COLS: 'COLS',
+    EXTERN: 'EXTERN'
 }
 
 export const translateGridToLayout = (grid, cols, allComponents) => {
@@ -28,7 +29,7 @@ export const translateGridToLayout = (grid, cols, allComponents) => {
           const w = getWidth(x,y, rawGrid)
           const h = getHeight(x,y, rawGrid)
           components[name] = {
-            x: x+1, // +1 to shift all one right for grid heights
+            x: x+2, // +1 to shift all one right for grid heights
             y: y+1, // +1 to shift all one bottom for grid widths
             w: w,
             h: h,
@@ -41,7 +42,7 @@ export const translateGridToLayout = (grid, cols, allComponents) => {
     }
 
     const widths = (grid.split('/')[1] || '').split(/\s+/).filter(x => x).map((row,i) => ({
-      x:i+1, // +1 to shift all one right for grid heights
+      x:i+2, // +1 to shift all one right for grid heights
       y:0,  // should be first row
       w:1, 
       h:1, 
@@ -61,22 +62,21 @@ export const translateGridToLayout = (grid, cols, allComponents) => {
       .map(row => row.split('"')[2])
       .map(row => row || 'auto')
       .map((row,i) => ({
-        x:0, // must be first coll
+        x:1, // must be first coll
         y:i+1, // +1 to shift all one bottom for grid widths
         w:1,
         h:1,
         i: (row+'-'+i),
         static: true,
         name: row,
-        type: types.HEIGHT,
-        isGrid: true
+        type: types.HEIGHT
       }))
 
     const buffer = allComponents
       .filter(comp => !components[comp])
       .map((row,i) => ({
-        x: cols-1,
-        y: i,
+        x: 0,
+        y: i+1,
         w:1,
         h:1,
         i: (row+'-'+i),
@@ -90,6 +90,7 @@ export const translateGridToLayout = (grid, cols, allComponents) => {
       ...Object.values(components),
       ...buffer,
       // cols
-      {x:0, y:0, w:1, h:1, i:'cols', static:true, name:2, type:types.COLS  }
-    ]//.filter(row => row.x+row.w < cols || !row.isGrid)
+      {x:1, y:0, w:1, h:1, i:'cols', static:true, name:'cols', type:types.COLS  },
+      {x:0, y:0, w:1, h:1, i:'extern', static:true, name:'buffer', type:types.EXTERN  }
+    ].filter(row => row.x+row.w <= cols)
 }
