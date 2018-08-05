@@ -92,3 +92,19 @@ export const translateGridToLayout = (grid, cols, allComponents) => {
       {x:0, y:0, w:1, h:1, i:'extern', static:true, name:'buffer', type:types.EXTERN  }
     ].filter(row => row.x+row.w <= cols)
 }
+
+export const getColNumFromGrid = grid => {
+  const result = grid
+      .split('/')[0]
+      .split('\n')
+      .map(row => row.split('"')[1])
+      .filter(row => row)
+      .map(row => row.split(/\s+/))
+      .map(row => row.filter(x => x))
+
+  return result[0].length +2
+}
+
+export const translateLayoutToGrid = layout => {
+  
+}

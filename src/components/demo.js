@@ -1,6 +1,6 @@
 import React from "react"
 import RGL, { WidthProvider } from "react-grid-layout"
-import {translateGridToLayout, types} from '../utils/grid'
+import {getColNumFromGrid, translateGridToLayout, types} from '../utils/grid'
 import styled from 'styled-components'
 
 const grid = `
@@ -29,7 +29,7 @@ const ReactGridLayout = WidthProvider(RGL);
  */
 export default class DynamicMinMaxLayout extends React.PureComponent {
 
-  state = { layout: [], cols: 6 }
+  state = { layout: [], cols: getColNumFromGrid(grid) }
 
   componentDidMount(){
     const layout = translateGridToLayout(grid, this.state.cols, allComponents)
