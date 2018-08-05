@@ -105,6 +105,16 @@ export const getColNumFromGrid = grid => {
   return result[0].length +2
 }
 
-export const translateLayoutToGrid = layout => {
-  
+export const updateLayout = (ownLayout, nativeLayout) => {
+  const dict = nativeLayout.reduce((p,n) => Object.assign(p, {[n.i]: n}), {})
+
+  const layout = ownLayout.map(row => ({
+    ...row,
+    x: dict[row.i].x,
+    y: dict[row.i].y,
+    w: dict[row.i].w,
+    h: dict[row.i].h
+  }))
+
+  return layout
 }

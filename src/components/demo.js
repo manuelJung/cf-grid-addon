@@ -1,6 +1,6 @@
 import React from "react"
 import RGL, { WidthProvider } from "react-grid-layout"
-import {getColNumFromGrid, translateGridToLayout, types} from '../utils/grid'
+import {getColNumFromGrid, translateGridToLayout, types, updateLayout} from '../utils/grid'
 import styled from 'styled-components'
 
 const grid = `
@@ -64,15 +64,21 @@ export default class DynamicMinMaxLayout extends React.PureComponent {
     )
   }
 
+  handleLayoutChange = nativeLayout => {
+    const layout = updateLayout(this.state.layout, nativeLayout)
+    this.setState({layout})
+  }
+
   render() {
     const gridProps = {
       isDraggable: true,
       isResizable: true,
       items: 5,
       rowHeight: 30,
-      onLayoutChange: () => console.log(this.state.layout),
+      onLayoutChange: this.handleLayoutChange,
       cols: this.state.cols
     }
+    
     return (
       <ReactGridLayout {...gridProps} key={grid+this.state.cols}>
         {this.state.layout.map(this.createComponent)}
