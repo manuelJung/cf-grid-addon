@@ -5,7 +5,7 @@ export const types = {
     COLS: 'COLS'
 }
 
-export const translateGridToLayout = grid => {
+export const translateGridToLayout = (grid, cols) => {
     const components = {}
 
     const rawGrid = grid
@@ -16,6 +16,8 @@ export const translateGridToLayout = grid => {
       .map(row => row.split(/\s+/))
       .map(row => row.filter(x => x))
 
+    if(!cols){ cols= rawGrid[0].length+2 }
+
     const getWidth = (x,y,g) => g[y].filter(n => n === g[y][x]).length
     const getHeight = (x,y,g) => g.map((_,i) => g[i][x]).filter(n => n === g[y][x]).length
 
@@ -23,11 +25,13 @@ export const translateGridToLayout = grid => {
       for(let y=0;y<rawGrid.length;y++){
         const name = rawGrid[y][x]
         if(!components[name] && name !== '.'){
-          components[rawGrid[y][x]] = {
+          const w = getWidth(x,y, rawGrid)
+          const h = getHeight(x,y, rawGrid)
+          components[name] = {
             x: x+1, // +1 to shift all one right for grid heights
             y: y+1, // +1 to shift all one bottom for grid widths
-            w: getWidth(x,y, rawGrid),
-            h: getHeight(x,y, rawGrid),
+            w: w,
+            h: h,
             i: name,
             name: name,
             type: types.COMPONENT
@@ -73,5 +77,5 @@ export const translateGridToLayout = grid => {
       ...Object.values(components),
       // cols
       {x:0, y:0, w:1, h:1, i:'cols', static:true, name:2, type:types.COLS  }
-    ]
+    ].filter(row => row.x+row.w < cols)
 }
