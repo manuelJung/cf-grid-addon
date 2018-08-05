@@ -4,7 +4,6 @@ export const types = {
     HEIGHT: 'HEIGHT',
     COLS: 'COLS',
     EXTERN: 'EXTERN',
-    BUFFER: 'BUFFER'
 }
 
 export const translateGridToLayout = (grid, cols, allComponents) => {
@@ -79,7 +78,8 @@ export const translateGridToLayout = (grid, cols, allComponents) => {
         h:1,
         i: (row+'-'+i),
         name: row,
-        type: types.BUFFER
+        type: types.COMPONENT,
+        isBuffer: true
       }))
 
     return [
@@ -117,4 +117,48 @@ export const updateLayout = (ownLayout, nativeLayout) => {
   }))
 
   return layout
+}
+
+export const translateLayoutToGrid = layout => {
+  const components = layout
+    .filter(row => row.type === types.COMPONENT)
+    .map(row => ({
+      ...row,
+      x: row.x-2,
+      y: row.y-1
+    }))
+  
+  const GRID_WIDTH = components.reduce((p,n) => {
+    const width = n.w + n.x
+    return width > p ? width : p
+  },1)
+
+  const GRID_HEIGHT = components.reduce((p,n) => {
+    const height = n.h + n.y
+    return height > p ? height : p
+  },1)
+
+  const grid = Array(GRID_HEIGHT).fill().map(() => Array(GRID_WIDTH).fill().map(() => '.'))
+
+  // set components
+  components.forEach(row => Array(row.h).fill().forEach((_,y) => Array(row.w).fill().forEach((_,x) => {
+    grid[y+row.y][x+row.x] = row.name
+  })))
+
+  const widths = layout
+    .filter(row => row.type === types.WIDTH)
+    .sort((a,b) => a.x - b.x)
+    .map(row => row.name)
+
+  const heights = layout
+    .filter(row => row.type === types.HEIGHT)
+    .sort((a,b) => a.y - b.y)
+    .map(row => row.name)
+
+  const result = grid
+    .map((row,i) => `" ${row.join(' ')} " ${heights[i]}`)
+    .concat(`/ ${widths.join(' ')}`)
+    .join('\n')
+
+  return result
 }
