@@ -43,6 +43,13 @@ export default class DynamicMinMaxLayout extends React.PureComponent {
     })
   }
 
+  handleLayoutChange = nativeLayout => {
+    const layout = updateLayout(this.state.layout, nativeLayout)
+    this.setState({layout})
+    const grid = translateLayoutToGrid(layout)
+    console.log(grid)
+  }
+
   renderCols = (l,i) => {
     return (
       <Component key={l.i} data-grid={l} isStatic={l.static}>
@@ -62,13 +69,6 @@ export default class DynamicMinMaxLayout extends React.PureComponent {
         <span className="text">{l.name}</span>
       </Component>
     )
-  }
-
-  handleLayoutChange = nativeLayout => {
-    const layout = updateLayout(this.state.layout, nativeLayout)
-    this.setState({layout})
-    const grid = translateLayoutToGrid(layout)
-    console.log(grid)
   }
 
   render() {

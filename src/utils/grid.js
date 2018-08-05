@@ -28,14 +28,16 @@ export const translateGridToLayout = (grid, cols, allComponents) => {
         if(!components[name] && name !== '.'){
           const w = getWidth(x,y, rawGrid)
           const h = getHeight(x,y, rawGrid)
-          components[name] = {
-            x: x+2, // +1 to shift all one right for grid heights
-            y: y+1, // +1 to shift all one bottom for grid widths
-            w: w,
-            h: h,
-            i: name,
-            name: name,
-            type: types.COMPONENT
+          if(w+x+1 < cols){
+            components[name] = {
+              x: x+2, // +1 to shift all one right for grid heights
+              y: y+1, // +1 to shift all one bottom for grid widths
+              w: w,
+              h: h,
+              i: name,
+              name: name,
+              type: types.COMPONENT
+            }
           }
         }
       }

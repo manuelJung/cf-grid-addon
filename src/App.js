@@ -3,14 +3,14 @@ import logo from './logo.svg'
 import './App.css'
 import styled from 'styled-components'
 
-import Demo from './components/demo'
+import Grid from './components/Grid'
 
 export default class App extends Component {
   render() {
     return (
       <div className="App">
         <GridWrapper>
-          <Demo />
+          <Grid />
         </GridWrapper>
       </div>
     );
