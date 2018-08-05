@@ -1,6 +1,6 @@
 import React from "react"
 import RGL, { WidthProvider } from "react-grid-layout"
-import {translateGridToLayout} from '../utils/grid'
+import {translateGridToLayout, types} from '../utils/grid'
 import styled from 'styled-components'
 
 const ReactGridLayout = WidthProvider(RGL);
@@ -13,7 +13,7 @@ const ReactGridLayout = WidthProvider(RGL);
  */
 export default class DynamicMinMaxLayout extends React.PureComponent {
 
-  state = { layout: [] }
+  state = { layout: [], cols: 6 }
 
   componentDidMount(){
     const layout = translateGridToLayout(`
@@ -29,7 +29,20 @@ export default class DynamicMinMaxLayout extends React.PureComponent {
     this.setState({layout})
   }
 
+  renderCols = (l,i) => {
+    return (
+      <Component key={l.i} data-grid={l} isStatic={l.static}>
+        <button onClick={() => this.setState({ cols: this.state.cols-1})}>-</button>
+        <span>{this.state.cols-2}</span>
+        <button onClick={() => this.setState({ cols: this.state.cols+1})}>+</button>
+      </Component>
+    )
+  }
+
   createComponent = (l,i) => {
+    if(l.type === types.COLS){
+      return this.renderCols(l,i)
+    }
     return (
       <Component key={l.i} data-grid={l} isStatic={l.static}>
         <span className="text">{l.name}</span>
@@ -44,7 +57,7 @@ export default class DynamicMinMaxLayout extends React.PureComponent {
       items: 5,
       rowHeight: 30,
       onLayoutChange: console.log,
-      cols: 6
+      cols: this.state.cols
     }
     return (
       <ReactGridLayout {...gridProps} >
