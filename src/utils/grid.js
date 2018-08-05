@@ -5,7 +5,7 @@ export const types = {
     COLS: 'COLS'
 }
 
-export const translateGridToLayout = (grid, cols) => {
+export const translateGridToLayout = (grid, cols, allComponents) => {
     const components = {}
 
     const rawGrid = grid
@@ -68,14 +68,28 @@ export const translateGridToLayout = (grid, cols) => {
         i: (row+'-'+i),
         static: true,
         name: row,
-        type: types.HEIGHT
+        type: types.HEIGHT,
+        isGrid: true
+      }))
+
+    const buffer = allComponents
+      .filter(comp => !components[comp])
+      .map((row,i) => ({
+        x: cols-1,
+        y: i,
+        w:1,
+        h:1,
+        i: (row+'-'+i),
+        name: row,
+        type: types.COMPONENT
       }))
 
     return [
       ...widths,
       ...heights,
       ...Object.values(components),
+      ...buffer,
       // cols
       {x:0, y:0, w:1, h:1, i:'cols', static:true, name:2, type:types.COLS  }
-    ].filter(row => row.x+row.w < cols)
+    ]//.filter(row => row.x+row.w < cols || !row.isGrid)
 }

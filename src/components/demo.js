@@ -14,6 +14,11 @@ const grid = `
   / 1fr   1fr   1fr   1fr
 `
 
+const allComponents = [
+  'Title', 'Img1', 'Img2', 'Img3', 'Img4', 'Img5', 'Img6',
+  'Img7', 'Img8', 'Img9', 'Img10', 'Img11', 'desc', 'test'
+]
+
 const ReactGridLayout = WidthProvider(RGL);
 
 /**
@@ -27,14 +32,14 @@ export default class DynamicMinMaxLayout extends React.PureComponent {
   state = { layout: [], cols: 6 }
 
   componentDidMount(){
-    const layout = translateGridToLayout(grid, this.state.cols)
+    const layout = translateGridToLayout(grid, this.state.cols, allComponents)
     this.setState({layout})
   }
 
   setCols = num => () => {
     this.setState({
       cols: num,
-      layout: translateGridToLayout(grid, num)
+      layout: translateGridToLayout(grid, num, allComponents)
     })
   }
 
