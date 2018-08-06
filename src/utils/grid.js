@@ -126,10 +126,11 @@ export const getColNumFromGrid = grid => {
   return result[0].length +2
 }
 
+let set = false
 export const updateLayout = (ownLayout, nativeLayout) => {
   const dict = nativeLayout.reduce((p,n) => Object.assign(p, {[n.i]: n}), {})
 
-  const layout = ownLayout.map(row => ({
+  let layout = ownLayout.map(row => ({
     ...row,
     x: dict[row.i].x,
     y: dict[row.i].y,
@@ -137,31 +138,23 @@ export const updateLayout = (ownLayout, nativeLayout) => {
     h: dict[row.i].h
   }))
 
+  const gridHeight = layout.filter(row => row.x >= 2 && row.y >= 1).reduce((p,n) => {
+    const h = n.y + n.h - 1
+    return h > p ? h : p
+  }, 0)
+  const numHeights = layout.filter(row => row.type === types.HEIGHT).length
+
+  if(gridHeight > numHeights){
+    const rawHeights = layout.filter(row => row.type === types.HEIGHT).map(row => row.name).concat(['auto'])
+    layout = layout.filter(row => row.type !== types.HEIGHT).concat(createHeights(rawHeights))
+  }
+  if(gridHeight < numHeights){
+    const rawHeights = layout.filter(row => row.type === types.HEIGHT).map(row => row.name).slice(0, gridHeight)
+    layout = layout.filter(row => row.type !== types.HEIGHT).concat(createHeights(rawHeights))
+  }
+
+
   return layout
-
-  // const widths = layout.filter(row => row.type === types.WIDTH)
-  // const rawBuffer = layout.filter(row => row.x === 0 && row.y >= 1).map(row => row.name)
-  // const rawGrid = layout.filter(row => row.x >= 2 && row.y >= 1).reduce((p,n) => {
-  //   const x = n.x-2
-  //   const y = n.y-1
-  //   Array(n.h).fill().forEach((_, h) => Array(n.w).fill().forEach((_, w) => {
-  //     if(!p[y+h]) p[y+h] = []
-  //     p[y+h][x+w] = n.name
-  //   }))
-  //   return p
-  // },[])
-  // let rawHeights = layout.filter(row => row.type === types.HEIGHT).map(row => row.name)
-  // if(rawHeights.length > rawGrid.length) rawHeights = rawHeights.slice(0, rawGrid.height)
-  // if(rawHeights.length < rawGrid.length) rawHeights.push('auto')
-
-  // return [
-  //   {x:1, y:0, w:1, h:1, i:'cols', static:true, name:'cols', type:types.COLS  },
-  //   {x:0, y:0, w:1, h:1, i:'extern', static:true, name:'buffer', type:types.EXTERN  },
-  //   ...widths,
-  //   ...createBuffer(rawBuffer),
-  //   ...createHeights(rawHeights),
-  //   ...createGrid(rawGrid)
-  // ]
 }
 
 export const translateLayoutToGrid = layout => {
@@ -203,6 +196,7 @@ export const translateLayoutToGrid = layout => {
   const result = grid
     .map((row,i) => `" ${row.join(' ')} " ${heights[i]}`)
     .concat(`/ ${widths.join(' ')}`)
+    .filter(row => !row.includes('undefined'))
     .join('\n')
 
   return result
