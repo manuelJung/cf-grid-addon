@@ -14,7 +14,7 @@ const DEMO_GRID = (`
 // const DEMO_COMPONENTS = []
 
 const DEMO_COMPONENTS = [
-  'Title', 'Img1', 'Img2', 'Img3', 'Img4', 'Img5', 'Img6', 'Img7',
+  'Title', 'Img1', 'Img2', 'Img3', 'Img4', 'Img5', 'Img6', //'Img7',
   'Img8', 'Img9', 'Img10', 'Img11', 'desc', 'Test'
 ] 
 

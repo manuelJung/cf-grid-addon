@@ -40,7 +40,7 @@ const createBuffer = rawBuffer => rawBuffer.map((val, i) => ({
   isBuffer: true
 }))
 
-const createGrid = rawGrid => {
+const createGrid = (rawGrid, dict) => {
   if(!rawGrid.length) return []
   const components = {}
   const getWidth = (x,y,g) => g[y].filter(n => n === g[y][x]).length
@@ -58,7 +58,8 @@ const createGrid = rawGrid => {
           h: h,
           i: name,
           name: name,
-          type: types.COMPONENT
+          type: types.COMPONENT,
+          exists: Boolean(dict[name])
         }
       }
     }
@@ -68,6 +69,9 @@ const createGrid = rawGrid => {
 
 export const translateGridToLayout = (grid, cols, allComponents) => {
   const gridCols = cols -2
+
+  const allComponentsDict = allComponents.reduce((p,n) => Object.assign(p, {[n]:n}), {})
+
   const rawGrid = grid
     .split('/')[0]
     .split('\n')
@@ -109,7 +113,7 @@ export const translateGridToLayout = (grid, cols, allComponents) => {
     ...createWidths(rawWidths),
     ...createBuffer(allUnusedComponents),
     ...createHeights(rawHeights),
-    ...createGrid(rawGrid)
+    ...createGrid(rawGrid, allComponentsDict)
   ]
 }
 

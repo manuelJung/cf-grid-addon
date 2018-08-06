@@ -43,7 +43,7 @@ export default class DynamicMinMaxLayout extends React.PureComponent {
 
   renderCols = (l,i) => {
     return (
-      <Component key={l.i} data-grid={l} isStatic={l.static}>
+      <Component key={l.i} data-grid={l} isStatic={l.static} exists={l.exists}>
         <button onClick={this.setCols(this.state.cols-1)}>-</button>
         <span>{this.state.cols-2}</span>
         <button onClick={this.setCols(this.state.cols+1)}>+</button>
@@ -71,6 +71,8 @@ export default class DynamicMinMaxLayout extends React.PureComponent {
       onLayoutChange: this.handleLayoutChange,
       cols: this.state.cols
     }
+
+    console.log(this.state.layout)
     
     return (
       <ReactGridLayout {...gridProps} key={this.props.grid+this.state.cols}>
