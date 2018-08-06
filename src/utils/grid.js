@@ -167,12 +167,12 @@ export const translateLayoutToGrid = layout => {
   const widths = layout
     .filter(row => row.type === types.WIDTH)
     .sort((a,b) => a.x - b.x)
-    .map(row => row.name)
+    .map(row => row.name || '1fr')
 
   const heights = layout
     .filter(row => row.type === types.HEIGHT)
     .sort((a,b) => a.y - b.y)
-    .map(row => row.name)
+    .map(row => row.name || 'auto')
 
   const result = grid
     .map((row,i) => `" ${row.join(' ')} " ${heights[i]}`)

@@ -1,19 +1,14 @@
 
 
-export const getGrid = () => (`
-  " Title Title Title Title "
-  " Img1  Img1  Img1  Img1  "
-  " Img2  Img2  Img3  Img4  "
-  " Img5  Img5  Img6  Img6  "
-  " Img7  Img8  Img9  Img9  "
-  " Img10 Img10 desc  desc  "
-  " Img11 Img11 Img11 Img11 "
-  / 1fr   1fr   1fr   1fr
-`)
+export const getGrid = cf => cf.field.getValue()
 
-export const getAllComponents = () => [
-  'Title', 'Img1', 'Img2', 'Img3', 'Img4', 'Img5', 'Img6',
-  'Img7', 'Img8', 'Img9', 'Img10', 'Img11', 'desc', 'test'
-]
+export const getAllComponents = cf => {
+  cf.entry.fields.content.onValueChanged(console.log)
+  const value = cf.entry.fields.content.getValue()
+  let hits = (value.match(/gridArea="[^"]+/g) || []).map(row => row.replace('gridArea="', ''))
+  return hits
+}
 
-export const updateGrid = grid => console.log(grid)
+export const updateGrid = (cf, grid) => cf.field.getValue() !== grid && cf.field.setValue(grid)
+
+
