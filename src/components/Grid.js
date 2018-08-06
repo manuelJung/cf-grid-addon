@@ -29,24 +29,24 @@ const ReactGridLayout = WidthProvider(RGL);
  */
 export default class DynamicMinMaxLayout extends React.PureComponent {
 
-  state = { layout: [], cols: getColNumFromGrid(grid) }
+  state = { layout: [], cols: getColNumFromGrid(grid), grid: grid }
 
   componentDidMount(){
-    const layout = translateGridToLayout(grid, this.state.cols, allComponents)
+    const layout = translateGridToLayout(this.state.grid, this.state.cols, allComponents)
     this.setState({layout})
   }
 
   setCols = num => () => {
     this.setState({
       cols: num,
-      layout: translateGridToLayout(grid, num, allComponents)
+      layout: translateGridToLayout(this.state.grid, num, allComponents)
     })
   }
 
   handleLayoutChange = nativeLayout => {
     const layout = updateLayout(this.state.layout, nativeLayout)
-    this.setState({layout})
     const grid = translateLayoutToGrid(layout)
+    this.setState({layout, grid})
     console.log(grid)
   }
 
@@ -90,8 +90,9 @@ export default class DynamicMinMaxLayout extends React.PureComponent {
 }
 
 const Component = styled.div`
-  background: ${({isStatic}) => isStatic ? 'none' : 'lightgrey'};
+  background: ${({isStatic}) => isStatic ? 'none' : '#c3cfd5'};
   border: ${({isStatic}) => isStatic ? 'none' : '1px solid grey'};
+  border-radius: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
