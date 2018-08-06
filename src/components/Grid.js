@@ -16,7 +16,8 @@ export default class DynamicMinMaxLayout extends React.PureComponent {
 
   static propTypes = {
     grid: pt.string.isRequired,
-    allComponents: pt.arrayOf(pt.string).isRequired
+    allComponents: pt.arrayOf(pt.string).isRequired,
+    onGridChange: pt.func.isRequired
   }
 
   state = { layout: [], cols: getColNumFromGrid(this.props.grid), grid: this.props.grid }
@@ -37,7 +38,7 @@ export default class DynamicMinMaxLayout extends React.PureComponent {
     const layout = updateLayout(this.state.layout, nativeLayout)
     const grid = translateLayoutToGrid(layout)
     this.setState({layout, grid})
-    console.log(grid)
+    this.props.onGridChange(grid)
   }
 
   renderCols = (l,i) => {

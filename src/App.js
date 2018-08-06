@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import Grid from './components/Grid'
 
-import {getGrid, getAllComponents} from './utils/cf'
+import {getGrid, getAllComponents, updateGrid} from './utils/cf'
 
 export default class App extends Component {
   render() {
@@ -14,7 +14,7 @@ export default class App extends Component {
     return (
       <div className="App">
         <GridWrapper>
-          <Grid grid={grid} allComponents={allComponents}/>
+          <Grid grid={grid} allComponents={allComponents} onGridChange={updateGrid}/>
         </GridWrapper>
       </div>
     );
