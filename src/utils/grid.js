@@ -41,28 +41,29 @@ isBuffer: true
 }))
 
 const createGrid = rawGrid => {
-const components = {}
-const getWidth = (x,y,g) => g[y].filter(n => n === g[y][x]).length
-const getHeight = (x,y,g) => g.map((_,i) => g[i][x]).filter(n => n === g[y][x]).length
-for(let x=0;x<rawGrid[0].length;x++){
-  for(let y=0;y<rawGrid.length;y++){
-    const name = rawGrid[y][x]
-    if(!components[name] && name !== '.'){
-      const w = getWidth(x,y, rawGrid)
-      const h = getHeight(x,y, rawGrid)
-      components[name] = {
-        x: x+2, // +1 to shift all one right for grid heights
-        y: y+1, // +1 to shift all one bottom for grid widths
-        w: w,
-        h: h,
-        i: name,
-        name: name,
-        type: types.COMPONENT
+  if(!rawGrid.length) return []
+  const components = {}
+  const getWidth = (x,y,g) => g[y].filter(n => n === g[y][x]).length
+  const getHeight = (x,y,g) => g.map((_,i) => g[i][x]).filter(n => n === g[y][x]).length
+  for(let x=0;x<rawGrid[0].length;x++){
+    for(let y=0;y<rawGrid.length;y++){
+      const name = rawGrid[y][x]
+      if(!components[name] && name !== '.'){
+        const w = getWidth(x,y, rawGrid)
+        const h = getHeight(x,y, rawGrid)
+        components[name] = {
+          x: x+2, // +1 to shift all one right for grid heights
+          y: y+1, // +1 to shift all one bottom for grid widths
+          w: w,
+          h: h,
+          i: name,
+          name: name,
+          type: types.COMPONENT
+        }
       }
     }
   }
-}
-return Object.values(components)
+  return Object.values(components)
 }
 
 export const translateGridToLayout = (grid, cols, allComponents) => {
@@ -92,13 +93,13 @@ const rawWidths = (grid.split('/')[1] || '')
     if(list.length < gridCols) return Array(gridCols).fill().map((_,i) => list[i] || '1fr')
     if(list.length > gridCols) return list.slice(0, gridCols)
     return list
-  })
+  }, [])
 
 const allUsedComponents = rawGrid
   .map(row => row.join('|'))
   .join('|')
   .split('|')
-  .reduce((p,n,i,list) => list.length === i+1 && [...new Set(list)])
+  .reduce((p,n,i,list) => list.length === i+1 && [...new Set(list)]) || []
 
 const allUnusedComponents = allComponents.filter(comp => !allUsedComponents.find(name => name === comp))
 
@@ -113,6 +114,7 @@ return [
 }
 
 export const getColNumFromGrid = grid => {
+  if(!grid) return 6
   const result = grid
       .split('/')[0]
       .split('\n')

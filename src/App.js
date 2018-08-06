@@ -10,7 +10,7 @@ import {getGrid, getAllComponents, updateGrid} from './utils/cf'
 export default class App extends Component {
 
   static propTypes = {
-    cf: pt.func.isRequired
+    cf: pt.object.isRequired
   }
 
   componentDidMount(){
