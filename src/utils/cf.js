@@ -11,12 +11,12 @@ const DEMO_GRID = (``)
 //   / 1fr   1fr   1fr   1fr
 // `)
 
-const DEMO_COMPONENTS = []
+// const DEMO_COMPONENTS = []
 
-// const DEMO_COMPONENTS = [
-//   'Title', 'Img1', 'Img2', 'Img3', 'Img4', 'Img5', 'Img6', 'Img7',
-//   'Img8', 'Img9', 'Img10', 'Img11', 'desc', 'Test'
-// ] 
+const DEMO_COMPONENTS = [
+  'Title', 'Img1', 'Img2', 'Img3', 'Img4', 'Img5', 'Img6', 'Img7',
+  'Img8', 'Img9', 'Img10', 'Img11', 'desc', 'Test'
+] 
 
 export const getGrid = cf => {
   if(process.env.NODE_ENV !== 'production'){ return DEMO_GRID }

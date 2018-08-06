@@ -8,36 +8,36 @@ export const types = {
 }
 
 const createWidths = rawWidths => rawWidths.map((val,i) => ({
-x:i+2, // +2 to shift all two right for grid heights and buffer
-y:0,  // should be first row
-w:1, 
-h:1, 
-i: 'width-'+i, 
-static: true, 
-name: val, 
-type: types.WIDTH
+  x:i+2, // +2 to shift all two right for grid heights and buffer
+  y:0,  // should be first row
+  w:1, 
+  h:1, 
+  i: 'width-'+i, 
+  static: true, 
+  name: val, 
+  type: types.WIDTH
 }))
 
 const createHeights = rawHeights => rawHeights.map((val,i) => ({
-x:1, // always second column
-y:i+1, // +1 to shift all one to bottom for widths
-w:1,
-h:1,
-i: 'height-'+i,
-static: true,
-name: val,
-type: types.HEIGHT
+  x:1, // always second column
+  y:i+1, // +1 to shift all one to bottom for widths
+  w:1,
+  h:1,
+  i: 'height-'+i,
+  static: true,
+  name: val,
+  type: types.HEIGHT
 }))
 
 const createBuffer = rawBuffer => rawBuffer.map((val, i) => ({
-x: 0, // always first column
-y: i+1, // +1 to shift all one to bottom for widths
-w:1,
-h:1,
-i: 'buffer-'+i,
-name: val,
-type: types.COMPONENT,
-isBuffer: true
+  x: 0, // always first column
+  y: i+1, // +1 to shift all one to bottom for widths
+  w:1,
+  h:1,
+  i: 'buffer-'+i,
+  name: val,
+  type: types.COMPONENT,
+  isBuffer: true
 }))
 
 const createGrid = rawGrid => {
@@ -67,50 +67,50 @@ const createGrid = rawGrid => {
 }
 
 export const translateGridToLayout = (grid, cols, allComponents) => {
-const gridCols = cols -2
-const rawGrid = grid
-  .split('/')[0]
-  .split('\n')
-  .map(row => row.split('"')[1])
-  .filter(row => row)
-  .map(row => row.split(/\s+/))
-  .map(row => row.filter(x => x))
-  .map(row => row.slice(0,gridCols))
+  const gridCols = cols -2
+  const rawGrid = grid
+    .split('/')[0]
+    .split('\n')
+    .map(row => row.split('"')[1])
+    .filter(row => row)
+    .map(row => row.split(/\s+/))
+    .map(row => row.filter(x => x))
+    .map(row => row.slice(0,gridCols))
 
-const rawHeights = grid
-  .split('/')[0]
-  .split('\n')
-  .filter(row => row.split(/\s+/).length > 2)
-  .map(row => row.split('"')[2])
-  .map(row => row || 'auto')
-  .slice(0, rawGrid.length)
+  const rawHeights = grid
+    .split('/')[0]
+    .split('\n')
+    .filter(row => row.split(/\s+/).length > 2)
+    .map(row => row.split('"')[2])
+    .map(row => row || 'auto')
+    .slice(0, rawGrid.length)
 
-const gridWidths = (grid.split('/')[1] || '').split(/\s+/) 
-const rawWidths = Array(cols).fill()
-  .map((_,i) => gridWidths[i] || '1fr')
-  .reduce((p,n,i,list) => {
-    if(list.length !== i+1) return null
-    if(list.length < gridCols) return Array(gridCols).fill().map((_,i) => list[i] || '1fr')
-    if(list.length > gridCols) return list.slice(0, gridCols)
-    return list
-  }, [])
+  const gridWidths = (grid.split('/')[1] || '').split(/\s+/) 
+  const rawWidths = Array(cols).fill()
+    .map((_,i) => gridWidths[i] || '1fr')
+    .reduce((p,n,i,list) => {
+      if(list.length !== i+1) return null
+      if(list.length < gridCols) return Array(gridCols).fill().map((_,i) => list[i] || '1fr')
+      if(list.length > gridCols) return list.slice(0, gridCols)
+      return list
+    }, [])
 
-const allUsedComponents = rawGrid
-  .map(row => row.join('|'))
-  .join('|')
-  .split('|')
-  .reduce((p,n,i,list) => list.length === i+1 && [...new Set(list)]) || []
+  const allUsedComponents = rawGrid
+    .map(row => row.join('|'))
+    .join('|')
+    .split('|')
+    .reduce((p,n,i,list) => list.length === i+1 && [...new Set(list)]) || []
 
-const allUnusedComponents = allComponents.filter(comp => !allUsedComponents.find(name => name === comp))
+  const allUnusedComponents = allComponents.filter(comp => !allUsedComponents.find(name => name === comp))
 
-return [
-  {x:1, y:0, w:1, h:1, i:'cols', static:true, name:'cols', type:types.COLS  },
-  {x:0, y:0, w:1, h:1, i:'extern', static:true, name:'buffer', type:types.EXTERN  },
-  ...createWidths(rawWidths),
-  ...createBuffer(allUnusedComponents),
-  ...createHeights(rawHeights),
-  ...createGrid(rawGrid)
-]
+  return [
+    {x:1, y:0, w:1, h:1, i:'cols', static:true, name:'cols', type:types.COLS  },
+    {x:0, y:0, w:1, h:1, i:'extern', static:true, name:'buffer', type:types.EXTERN  },
+    ...createWidths(rawWidths),
+    ...createBuffer(allUnusedComponents),
+    ...createHeights(rawHeights),
+    ...createGrid(rawGrid)
+  ]
 }
 
 export const getColNumFromGrid = grid => {
@@ -138,6 +138,30 @@ export const updateLayout = (ownLayout, nativeLayout) => {
   }))
 
   return layout
+
+  // const widths = layout.filter(row => row.type === types.WIDTH)
+  // const rawBuffer = layout.filter(row => row.x === 0 && row.y >= 1).map(row => row.name)
+  // const rawGrid = layout.filter(row => row.x >= 2 && row.y >= 1).reduce((p,n) => {
+  //   const x = n.x-2
+  //   const y = n.y-1
+  //   Array(n.h).fill().forEach((_, h) => Array(n.w).fill().forEach((_, w) => {
+  //     if(!p[y+h]) p[y+h] = []
+  //     p[y+h][x+w] = n.name
+  //   }))
+  //   return p
+  // },[])
+  // let rawHeights = layout.filter(row => row.type === types.HEIGHT).map(row => row.name)
+  // if(rawHeights.length > rawGrid.length) rawHeights = rawHeights.slice(0, rawGrid.height)
+  // if(rawHeights.length < rawGrid.length) rawHeights.push('auto')
+
+  // return [
+  //   {x:1, y:0, w:1, h:1, i:'cols', static:true, name:'cols', type:types.COLS  },
+  //   {x:0, y:0, w:1, h:1, i:'extern', static:true, name:'buffer', type:types.EXTERN  },
+  //   ...widths,
+  //   ...createBuffer(rawBuffer),
+  //   ...createHeights(rawHeights),
+  //   ...createGrid(rawGrid)
+  // ]
 }
 
 export const translateLayoutToGrid = layout => {
