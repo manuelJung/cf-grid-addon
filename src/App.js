@@ -5,12 +5,16 @@ import styled from 'styled-components'
 
 import Grid from './components/Grid'
 
+import {getGrid, getAllComponents} from './utils/cf'
+
 export default class App extends Component {
   render() {
+    const grid = getGrid()
+    const allComponents = getAllComponents()
     return (
       <div className="App">
         <GridWrapper>
-          <Grid />
+          <Grid grid={grid} allComponents={allComponents}/>
         </GridWrapper>
       </div>
     );

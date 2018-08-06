@@ -1,23 +1,8 @@
 import React from "react"
+import pt from 'prop-types'
 import RGL, { WidthProvider } from "react-grid-layout"
 import {getColNumFromGrid, translateGridToLayout, types, updateLayout, translateLayoutToGrid} from '../utils/grid'
 import styled from 'styled-components'
-
-const grid = `
-  " Title Title Title Title "
-  " Img1  Img1  Img1  Img1  "
-  " Img2  Img2  Img3  Img4  "
-  " Img5  Img5  Img6  Img6  "
-  " Img7  Img8  Img9  Img9  "
-  " Img10 Img10 desc  desc  "
-  " Img11 Img11 Img11 Img11 "
-  / 1fr   1fr   1fr   1fr
-`
-
-const allComponents = [
-  'Title', 'Img1', 'Img2', 'Img3', 'Img4', 'Img5', 'Img6',
-  'Img7', 'Img8', 'Img9', 'Img10', 'Img11', 'desc', 'test'
-]
 
 const ReactGridLayout = WidthProvider(RGL);
 
@@ -29,17 +14,22 @@ const ReactGridLayout = WidthProvider(RGL);
  */
 export default class DynamicMinMaxLayout extends React.PureComponent {
 
-  state = { layout: [], cols: getColNumFromGrid(grid), grid: grid }
+  static propTypes = {
+    grid: pt.string.isRequired,
+    allComponents: pt.arrayOf(pt.string).isRequired
+  }
+
+  state = { layout: [], cols: getColNumFromGrid(this.props.grid), grid: this.props.grid }
 
   componentDidMount(){
-    const layout = translateGridToLayout(this.state.grid, this.state.cols, allComponents)
+    const layout = translateGridToLayout(this.state.grid, this.state.cols, this.props.allComponents)
     this.setState({layout})
   }
 
   setCols = num => () => {
     this.setState({
       cols: num,
-      layout: translateGridToLayout(this.state.grid, num, allComponents)
+      layout: translateGridToLayout(this.state.grid, num, this.props.allComponents)
     })
   }
 
@@ -82,7 +72,7 @@ export default class DynamicMinMaxLayout extends React.PureComponent {
     }
     
     return (
-      <ReactGridLayout {...gridProps} key={grid+this.state.cols}>
+      <ReactGridLayout {...gridProps} key={this.props.grid+this.state.cols}>
         {this.state.layout.map(this.createComponent)}
       </ReactGridLayout>
     );
