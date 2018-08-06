@@ -5,6 +5,7 @@ import {getColNumFromGrid, translateGridToLayout, types, updateLayout, translate
 import styled from 'styled-components'
 
 import Input from './Input'
+import Number from './Number'
 
 const ReactGridLayout = WidthProvider(RGL);
 
@@ -43,24 +44,12 @@ export default class DynamicMinMaxLayout extends React.PureComponent {
     this.props.onGridChange(grid)
   }
 
-  renderCols = (l,i) => {
-    return (
-      <Component key={l.i} data-grid={l} isStatic={l.static} exists={l.exists}>
-        <button onClick={this.setCols(this.state.cols-1)}>-</button>
-        <span>{this.state.cols-2}</span>
-        <button onClick={this.setCols(this.state.cols+1)}>+</button>
-      </Component>
-    )
-  }
-
   createComponent = (l,i) => {
-    if(l.type === types.COLS){
-      return this.renderCols(l,i)
-    }
     return (
       <Component key={l.i} data-grid={l} isStatic={l.static}>
         { l.type === types.HEIGHT ? <Input value={l.name} onChange={console.log} />
         : l.type === types.WIDTH ? <Input value={l.name} onChange={console.log} />
+        : l.type === types.COLS ? <Number value={this.state.cols} onChange={this.setCols} />
         : <span className="text">{l.name}</span>}
       </Component>
     )
