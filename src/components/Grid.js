@@ -93,9 +93,11 @@ const Component = styled.div`
     position: absolute;
     width: 10px;
     height: 10px;
-    right: 0;
-    bottom: 0;
-    background: grey;
+    right: 2px;
+    bottom: 2px;
+    border-right: 1px solid grey;
+    border-bottom: 1px solid grey;
+    cursor: pointer;
   }
 
   .el-static {
