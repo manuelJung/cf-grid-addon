@@ -85,9 +85,9 @@ const rawHeights = grid
   .map(row => row || 'auto')
   .slice(0, rawGrid.length)
 
-const rawWidths = (grid.split('/')[1] || '')
-  .split(/\s+/)
-  .filter(x => x)
+const gridWidths = (grid.split('/')[1] || '').split(/\s+/) 
+const rawWidths = Array(cols).fill()
+  .map((_,i) => gridWidths[i] || '1fr')
   .reduce((p,n,i,list) => {
     if(list.length !== i+1) return null
     if(list.length < gridCols) return Array(gridCols).fill().map((_,i) => list[i] || '1fr')
