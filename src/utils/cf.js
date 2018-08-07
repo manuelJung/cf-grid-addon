@@ -45,6 +45,7 @@ function getComponentsFromContent (value) {
     .filter(s => s.includes('gridArea="'))
     .map(s => s.match(/gridArea="[^"]+/g))
     .filter(s => s)
+    .map(s => s[0])
     .map(s => s.replace('gridArea="', ''))
 }
 
