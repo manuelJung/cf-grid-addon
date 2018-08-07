@@ -6,6 +6,7 @@ import styled from 'styled-components'
 
 import Input from './Input'
 import Number from './Number'
+import GridArea from './GridArea'
 
 const ReactGridLayout = WidthProvider(RGL);
 
@@ -50,7 +51,8 @@ export default class DynamicMinMaxLayout extends React.PureComponent {
         { l.type === types.HEIGHT ? <Input value={l.name} onChange={console.log} />
         : l.type === types.WIDTH ? <Input value={l.name} onChange={console.log} />
         : l.type === types.COLS ? <Number value={this.state.cols} onChange={this.setCols} />
-        : <span className="text">{l.name}</span>}
+        : l.type === types.COMPONENT ? <GridArea value={l.name} exists={l.wasRemoved} />
+        : <div>{l.name}</div>}
       </Component>
     )
   }

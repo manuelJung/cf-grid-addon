@@ -59,7 +59,7 @@ const createGrid = (rawGrid, dict) => {
           i: name,
           name: name,
           type: types.COMPONENT,
-          exists: Boolean(dict[name])
+          wasRemoved: Boolean(!dict[name])
         }
       }
     }
