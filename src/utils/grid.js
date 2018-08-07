@@ -126,6 +126,8 @@ export const getColNumFromGrid = grid => {
       .map(row => row.split(/\s+/))
       .map(row => row.filter(x => x))
 
+  if(!result[0]) return 6
+
   return result[0].length +2
 }
 
