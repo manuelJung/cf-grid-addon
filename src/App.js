@@ -13,13 +13,18 @@ export default class App extends Component {
     cf: pt.object.isRequired
   }
 
+  state = {
+    grid: getGrid(this.props.cf),
+    allComponents: getAllComponents(this.props.cf)
+  }
+
   componentDidMount(){
     this.props.cf.window.startAutoResizer()
   }
 
   render() {
-    const grid = getGrid(this.props.cf)
-    const allComponents = getAllComponents(this.props.cf)
+    let {grid, allComponents} = this.state
+
     return (
       <div className="App">
         <GridWrapper>
