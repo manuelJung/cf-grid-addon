@@ -98,11 +98,10 @@ export const translateGridToLayout = (grid, cols, allComponents) => {
       return list
     }, [])
 
-  const allUsedComponents = rawGrid
-    .map(row => row.join('|'))
-    .join('|')
-    .split('|')
-    .reduce((p,n,i,list) => list.length === i+1 && [...new Set(list)]) || []
+  const allUsedComponents = (() => {
+    let list = rawGrid.map(row => row.join('|')).join('|').split('|')
+    return [...new Set(list)]
+  })()
 
   const allUnusedComponents = allComponents.filter(comp => !allUsedComponents.find(name => name === comp))
 

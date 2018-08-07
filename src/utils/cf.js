@@ -1,5 +1,8 @@
 const log = true
-const DEMO_GRID = (`/ 1fr   1fr   1fr   1fr`)
+const DEMO_GRID = (`
+  " headline2 " auto
+  / 1fr 1fr 1fr 1fr
+`)
 
 // const DEMO_GRID = (`
 //   " Title Title Title Title " auto
@@ -12,7 +15,7 @@ const DEMO_GRID = (`/ 1fr   1fr   1fr   1fr`)
 //   / 1fr   1fr   1fr   1fr
 // `)
 
-const DEMO_COMPONENTS = []
+const DEMO_COMPONENTS = ['headline', 'headline2', 'headline3']
 
 // const DEMO_COMPONENTS = [
 //   'Title', 'Img1', 'Img2', 'Img3', 'Img4', 'Img5', 'Img6', //'Img7',
