@@ -51,7 +51,7 @@ export default class DynamicMinMaxLayout extends React.PureComponent {
         { l.type === types.HEIGHT ? <Input value={l.name} onChange={console.log} />
         : l.type === types.WIDTH ? <Input value={l.name} onChange={console.log} />
         : l.type === types.COLS ? <Number value={this.state.cols} onChange={this.setCols} />
-        : l.type === types.COMPONENT ? <GridArea value={l.name} exists={l.wasRemoved} />
+        : l.type === types.COMPONENT ? <GridArea value={l.name} wasRemoved={l.wasRemoved} />
         : <div>{l.name}</div>}
       </Component>
     )
@@ -76,9 +76,6 @@ export default class DynamicMinMaxLayout extends React.PureComponent {
 }
 
 const Component = styled.div`
-  background: ${({isStatic}) => isStatic ? 'none' : '#c3cfd5'};
-  border: ${({isStatic}) => isStatic ? 'none' : '1px solid grey'};
-  border-radius: 2px;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -5,13 +5,13 @@ import styled from 'styled-components'
 export default class Input extends React.Component {
   static propTypes = {
     value: pt.number.isRequired,
-    exists: pt.bool.isRequired
+    wasRemoved: pt.bool.isRequired
   }
 
   render () {
-      let {value, exists} = this.props
+      let {value, wasRemoved} = this.props
     return (
-      <Wrapper>
+      <Wrapper wasRemoved={wasRemoved}>
         {value}
       </Wrapper>
     )
@@ -20,6 +20,13 @@ export default class Input extends React.Component {
 }
 
 const Wrapper = styled.div`
-  
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
+  background: ${props => props.wasRemoved ? '#ff5722' : '#c3cfd5'};
+  border: 1px solid grey;
+  border-radius: 2px;
 `
