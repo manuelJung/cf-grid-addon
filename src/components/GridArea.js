@@ -2,10 +2,10 @@ import React from 'react'
 import pt from 'prop-types'
 import styled from 'styled-components'
 
-export default class Input extends React.Component {
+export default class GridArea extends React.Component {
   static propTypes = {
-    value: pt.number.isRequired,
-    wasRemoved: pt.bool.isRequired
+    value: pt.string.isRequired,
+    wasRemoved: pt.bool
   }
 
   render () {
