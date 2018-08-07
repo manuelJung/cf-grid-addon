@@ -22,5 +22,25 @@ export default class Input extends React.Component {
 }
 
 const Wrapper = styled.div`
-  
+  background: #c3cfd5;
+  border: 1px solid grey;
+  border-radius: 3px;
+  display: flex;
+
+
+  > button {
+      border: none;
+      background: none;
+      padding: 5px 10px;
+      font-size: 16px;
+      cursor: pointer;
+  }
+
+  > span {
+    padding: 5px 10px;
+    background white;
+    border-left: 1px solid grey;
+    border-right: 1px solid grey;
+  }
+
 `
