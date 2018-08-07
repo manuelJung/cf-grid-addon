@@ -36,8 +36,7 @@ const createBuffer = rawBuffer => rawBuffer.map((val, i) => ({
   h:1,
   i: 'buffer-'+i,
   name: val,
-  type: types.COMPONENT,
-  isBuffer: true
+  type: types.COMPONENT
 }))
 
 const createGrid = (rawGrid, dict) => {
@@ -142,6 +141,10 @@ export const updateLayout = (ownLayout, nativeLayout) => {
     h: dict[row.i].h
   }))
 
+  /**
+   * update grid heights
+   */
+
   const gridHeight = layout.filter(row => row.x >= 2 && row.y >= 1).reduce((p,n) => {
     const h = n.y + n.h - 1
     return h > p ? h : p
@@ -156,6 +159,15 @@ export const updateLayout = (ownLayout, nativeLayout) => {
     const rawHeights = layout.filter(row => row.type === types.HEIGHT).map(row => row.name).slice(0, gridHeight)
     layout = layout.filter(row => row.type !== types.HEIGHT).concat(createHeights(rawHeights))
   }
+
+  /**
+   * removed deleted gridAreas from buffer
+   */
+
+   const deletedComponents = layout.filter(row => row.x === 0 && row.y > 0 && row.wasRemoved)
+   if(deletedComponents.length){
+    layout = layout.filter(row => !deletedComponents.find(comp => comp.name === row.name))
+   }
 
 
   return layout
