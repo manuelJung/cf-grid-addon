@@ -25,10 +25,8 @@ export const getGrid = cf => {
 
 export const getAllComponents = cf => {
   if(process.env.NODE_ENV !== 'production'){ return DEMO_COMPONENTS }
-  cf.entry.fields.content.onValueChanged(console.log)
   const value = cf.entry.fields.content.getValue()
-  let hits = (value.match(/gridArea="[^"]+/g) || []).map(row => row.replace('gridArea="', ''))
-  return hits
+  return getComponentsFromContent(value)
 }
 
 export const updateGrid = (cf, grid) => {
@@ -36,4 +34,17 @@ export const updateGrid = (cf, grid) => {
   cf.field.getValue() !== grid && cf.field.setValue(grid)
 }
 
+export const listenToComponentsUpdate = (cf, cb) => {
+  if(process.env.NODE_ENV !== 'production') return () => null
+  return cf.entry.fields.content.onValueChanged(value =>  cb(getComponentsFromContent(value)))
+}
+
+function getComponentsFromContent (value) {
+  return value
+    .split('\n')
+    .filter(s => s.includes('gridArea="'))
+    .map(s => s.match(/gridArea="[^"]+/g))
+    .filter(s => s)
+    .map(s => s.replace('gridArea="', ''))
+}
 

@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import Grid from './components/Grid'
 
-import {getGrid, getAllComponents, updateGrid} from './utils/cf'
+import {getGrid, getAllComponents, updateGrid, listenToComponentsUpdate} from './utils/cf'
 
 export default class App extends Component {
 
@@ -18,8 +18,12 @@ export default class App extends Component {
     allComponents: getAllComponents(this.props.cf)
   }
 
+  unlistenToComponentsChange = () => null
+
   componentDidMount(){
-    this.props.cf.window.startAutoResizer()
+    let {cf} = this.props
+    cf.window.startAutoResizer()
+    this.unlistenToComponentsChange = listenToComponentsUpdate(cf, allComponents => this.setState({allComponents}))
   }
 
   render() {
@@ -27,9 +31,15 @@ export default class App extends Component {
 
     return (
       <div className="App">
-        <GridWrapper>
+        <GridWrapper key={allComponents}>
           <Grid grid={grid} allComponents={allComponents} onGridChange={g => updateGrid(this.props.cf, g)}/>
         </GridWrapper>
+        { process.env.NODE_ENV !== 'production' && <button onClick={() => {
+          this.setState({allComponents: [
+            'Title', 'Img1', 'Img2', 'Img3', 'Img4', 'Img5', 'XCYZ',
+            'Img8', 'Img9', 'Img10', 'Img11', 'desc', 'Test'
+          ]})
+        }}>add</button>}
       </div>
     );
   }
